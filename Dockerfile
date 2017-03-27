@@ -1,4 +1,4 @@
-FROM debian:8
+FROM armhf/debian:jessie
 
 ENV BORG_VERSION=1.0.10
 
