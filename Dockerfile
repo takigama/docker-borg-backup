@@ -1,4 +1,4 @@
-FROM debian:9
+FROM arm32v7/debian:9
 
 ENV BORG_VERSION=1.1.0
 
