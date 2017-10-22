@@ -1,6 +1,6 @@
 FROM arm32v7/debian:9
 
-ENV BORG_VERSION=1.1.0
+ENV BORG_VERSION=1.1.1
 
 RUN set -x \
     && apt-get update \
@@ -25,7 +25,7 @@ RUN set -x \
         -e 's/^#PasswordAuthentication yes$/PasswordAuthentication no/g' \
         -e 's/^PermitRootLogin without-password$/PermitRootLogin no/g' \
         -e 's/^X11Forwarding yes$/X11Forwarding no/g' \
-        -e 's/^#LogLevel .*$/LogLevel VERBOSE/g' \
+        -e 's/^#LogLevel .*$/LogLevel ERROR/g' \
         /etc/ssh/sshd_config
 
 VOLUME /var/backups/borg
