@@ -19,11 +19,17 @@ function clean {
 if [ "x$1" == "x" ]
 then
     usage
-    exit
+    exit 1
 fi
 
-# docker not updating my create user script.. pos
+if [ "x$2" == "x" ]
+then
+    usage
+    exit 1
+fi
 
+
+# "scrub" the username
 username=$(clean $1)
 
 if [ ${#username} -gt 12 ]
@@ -33,26 +39,47 @@ then
 fi
 
 
+job="unknown"
 adduser  --disabled-password --no-create-home --gecos "Borg Backup $username" --quiet $username --shell /bin/rbash --home /backups/$username/ > /dev/null 2>&1
 if [ $? == 0 ]
 then
     mkdir -p /backups/$username/repo/
+    job="create"
 else 
+    # the assumption is a non-0 exit status is "user exists".. should really be a bit more checking on that
+    job="checked"
     echo User exists, $username, enforcing settings
 fi
 
+# we really should check $2 is what it says it is.
 echo $2 > /opt/borgs/etc/users/$username
+
+# make sure the user key is basically unmodifable
 chown root:$username /opt/borgs/etc/users/$username
 chmod 640 /opt/borgs/etc/users/$username
 
-chown -R root:$username /backups/$username
-chmod 710 /backups/$username
-cp -f /opt/borgs/etc/rbash_profile /backups/$username/.bash_profile
-chown root:root /backups/$username/.bash_profile
-chmod 644 /backups/$username/.bash_profile
-chown $username:$username /backups/$username/repo/
+# make root own the user home directory, but group is for the user
+chown root:$username /backups/$username
 
-echo User $username created, backup path is /backups/$username/repo/
+# make the user home directory un-readable by anyone except root
+chmod 710 /backups/$username
+
+# create the rbash profile (even if it already exists)
+cp -f /opt/borgs/etc/rbash_profile /backups/$username/.bash_profile
+
+# make the profile unmodifable
+chown root:root /backups/$username/.bash_profile
+
+# allow the profile to be read by all
+chmod 644 /backups/$username/.bash_profile
+
+# ensure permissions for the repo directory are writable and owned by the user doing the backups
+chown -R $username:$username /backups/$username/repo/
+
+# set permissions for the user
+chmod -R 770 /backups/$username/repo/
+
+echo User $username $job, backup path is /backups/$username/repo/
 
 
 

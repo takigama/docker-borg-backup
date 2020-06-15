@@ -27,8 +27,7 @@ RUN set -x \
         -e 's/^#AuthorizedKeysFile.*$/AuthorizedKeysFile \/opt\/borgs\/etc\/users\/%u/g' \
         /etc/ssh/sshd_config
 
-VOLUME /backups
-VOLUME /opt/borgs/etc/users
+VOLUME [ "/backups", "/opt/borgs/etc/users" ]
 
 ADD ./entrypoint.sh /
 ADD ./createuser.sh /opt/borgs/sbin/createuser

@@ -15,7 +15,7 @@ do
         echo "No users exist yet"
     else 
         echo "Checking user $thisuser"
-        createuser $thisuser "`cat /opt/borgs/etc/users/$i`"
+        createuser $thisuser "`cat /opt/borgs/etc/users/$thisuser`"
     fi
 done
 

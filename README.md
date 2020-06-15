@@ -7,7 +7,7 @@ For more information about Borg Backup, an excellent deduplicating backup, refer
 The idea behind this container is to stop users from being able to modify backups except using the borg command, to achieve this the following occurs:
 
 * all users get a rbash shell with borg being their only command
-* all users run with a seperate UID - ideally, each server/workstation that backs up to this machine would be a seperate user
+* all users run with a seperate UID - for my purposes, each server/workstation that backs up to this machine would be a seperate user
 
 
 ## Usage
@@ -22,19 +22,21 @@ To then create a user, run the following:
 docker exec -it borg createuser <username> "<ssh key>"
 ```
 
-To delete a user - um... i'll get to that soon(tm).
+To delete a user - um... i'll get to that soon(tm), but currently this involes:
 
-Alternatively, use the Docker orchestrator of your choice.
+```
+docker exec borg deluser <username>
+docker exec borg rm -rf /backups/<username>
+docker exec borg rm -f /opt/borgs/etc/users/<username>  
+
 
 ## Layout
-
-The container uses /backups as its point of reference, storing all configuration here. There are several directories under this location:
 
 The container users two volumes, /backups and /etc/borgs/etc/users. If you want persistent data, you'll need both
 
  * /etc/borgs/etc/users/$username - each is a pubkey for $username, ultimately its our list of active users
- * /backups/$username - permission 0710 (user cant write in their own home directory)
- * /backups/$username/repo - loocation for actual backups (user writable)
+ * /backups/$username - permission 0710 (user cant write in their own home directory or even see the files that exist there)
+ * /backups/$username/repo - loocation for actual backups (user writable/readable, should be the only location the user can actually see anything)
 
 
 ## License
