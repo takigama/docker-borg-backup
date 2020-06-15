@@ -26,8 +26,8 @@ To delete a user - um... i'll get to that soon(tm), but currently this involes:
 
 ```
 docker exec borg deluser <username>
-docker exec borg rm -rf /backups/<username>
-docker exec borg rm -f /opt/borgs/etc/users/<username>  
+docker exec borg rm -rf /backups/<username>       # if you wish to delete their data
+docker exec borg rm -f /opt/borgs/etc/users/<username>       # if you wish to delete their key
 ```
 
 ## Layout
