@@ -1,16 +1,41 @@
-# docker-borg-backup
+# docker-borg-backup-secure
 
-A dockerized Borg Backup server. For more information about Borg Backup, an excellent deduplicating backup, refer to: https://www.borgbackup.org/
+Building on ginkels container, this is an attempt at making a docker container with added security for the borg backup software.
+
+For more information about Borg Backup, an excellent deduplicating backup, refer to: https://www.borgbackup.org/
+
+The idea behind this container is to stop users from being able to modify backups except using the borg command, to achieve this the following occurs:
+
+* all users get a rbash shell with borg being their only command
+* all users run with a seperate UID - ideally, each server/workstation that backs up to this machine would be a seperate user
+
 
 ## Usage
 
 ```
-docker run -e BORG_AUTHORIZED_KEYS=<ssh_authorized_key> -e BORG_UID=<uid> -e BORG_GID=<gid> -v <borg_volume>:/var/backups/borg tgbyte/borg-backup
+docker run --name borg -v <borg_backup_volume>:/backups -v <borg_user_list>:/opt/borgs/etc/users ...
 ```
+
+To then create a user, run the following:
+
+```
+docker exec -it borg createuser <username> "<ssh key>"
+```
+
+To delete a user - um... i'll get to that soon(tm).
 
 Alternatively, use the Docker orchestrator of your choice.
 
-**Caution:** Do NOT forget to mount a volume into the Borg container. Otherwise your backups will vanish into thin air when you update the Borg container.
+## Layout
+
+The container uses /backups as its point of reference, storing all configuration here. There are several directories under this location:
+
+The container users two volumes, /backups and /etc/borgs/etc/users. If you want persistent data, you'll need both
+
+ * /etc/borgs/etc/users/$username - each is a pubkey for $username, ultimately its our list of active users
+ * /backups/$username - permission 0710 (user cant write in their own home directory)
+ * /backups/$username/repo - loocation for actual backups (user writable)
+
 
 ## License
 
