@@ -35,7 +35,7 @@ docker exec borg rm -f /opt/borgs/etc/users/<username>       # if you wish to de
 The container users two volumes, /backups and /etc/borgs/etc/users. If you want persistent data, you'll need both
 
  * /etc/borgs/etc/users/$username - each is a pubkey for $username, ultimately its our list of active users
- * /backups/$username - permission 0710 (user cant write in their own home directory or even see the files that exist there)
+ * /backups/$username - permission 0710 (user cant write in their own home directory or even see the files that exist there. Home directory is owned by root)
  * /backups/$username/repo - loocation for actual backups (user writable/readable, should be the only location the user can actually see anything)
 
 
