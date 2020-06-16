@@ -31,7 +31,7 @@ VOLUME [ "/backups", "/opt/borgs/etc/users" ]
 
 ADD ./entrypoint.sh /
 ADD ./createuser.sh /opt/borgs/sbin/createuser
-ADD ./profile /opt/borgs/etc/rbash_profile
+ADD ./profile /opt/borgs/rbash_profile
 RUN chmod a+x /opt/borgs/sbin/createuser
 RUN ln -sf /opt/borgs/sbin/createuser /usr/sbin
 RUN ln -sf /usr/local/bin/borg /opt/borgs/bin

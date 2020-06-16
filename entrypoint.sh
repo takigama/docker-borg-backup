@@ -1,6 +1,15 @@
 #!/bin/bash
 
-dpkg-reconfigure openssh-server
+
+mkdir -p /opt/borgs/etc/ssh/ > /dev/null 2>&1
+mkdir -p /opt/borgs/etc/users/ > /dev/null 2>&1
+if [ ! -f /opt/borg/etc/ssh/ssh_host_dsa_key ]
+then
+    echo "doing SSH key createion"
+    ssh-keygen -A
+    mv /etc/ssh/ssh*key* /opt/borgs/etc/ssh/
+    ln -sf /opt/borgs/etc/ssh/* /etc/ssh 2> /dev/null 2>&1
+fi
 
 mkdir -p /backups > /dev/null 2>&1
 chmod 711 /backups

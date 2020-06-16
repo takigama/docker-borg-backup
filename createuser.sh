@@ -65,7 +65,7 @@ chown root:$username /backups/$username
 chmod 710 /backups/$username
 
 # create the rbash profile (even if it already exists)
-cp -f /opt/borgs/etc/rbash_profile /backups/$username/.bash_profile
+cp -f /opt/borgs/rbash_profile /backups/$username/.bash_profile
 
 # make the profile unmodifable
 chown root:root /backups/$username/.bash_profile

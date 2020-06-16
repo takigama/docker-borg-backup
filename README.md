@@ -40,9 +40,15 @@ docker exec borg rm -rf /backups/<username>       # if you wish to delete their 
 docker exec borg rm -f /opt/borgs/etc/users/<username>       # if you wish to delete their key
 ```
 
+How I actually run this in my evironment:
+```
+docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o parent=eth2 vlan_12 # gives me a layer 2 path direct to the network
+docker create --net vlan_12 --ip 10.12.12.222 --name="borgs" .... 
+```
+
 ## Layout
 
-The container users two volumes, /backups and /etc/borgs/etc/users. If you want persistent data, you'll need both
+The container users two volumes, /backups and /etc/borgs/etc/. If you want persistent data, you'll need both
 
  * /etc/borgs/etc/users/$username - each is a pubkey for $username, ultimately its our list of active users
  * /backups/$username - permission 0710 (user cant write in their own home directory or even see the files that exist there. Home directory is owned by root)
