@@ -1,6 +1,6 @@
 #!/bin/bash
 
-dpkg-reconfigure openssh-server
+# dpkg-reconfigure openssh-server
 
 mkdir -p /backups > /dev/null 2>&1
 chmod 711 /backups

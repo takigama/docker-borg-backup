@@ -40,6 +40,13 @@ docker exec borg rm -rf /backups/<username>       # if you wish to delete their 
 docker exec borg rm -f /opt/borgs/etc/users/<username>       # if you wish to delete their key
 ```
 
+How I actually run this in my evironment:
+```
+docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o parent=eth2 vlan_12 # gives me a layer 2 path direct to the network
+docker create --net vlan_12 --ip 10.12.12.222 --name="borgs" -e "TZ=Australia/Sydney" 
+
+
+
 ## Layout
 
 The container users two volumes, /backups and /etc/borgs/etc/users. If you want persistent data, you'll need both

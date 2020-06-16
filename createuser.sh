@@ -40,7 +40,7 @@ fi
 
 
 job="unknown"
-adduser  --disabled-password --no-create-home --gecos "Borg Backup $username" --quiet $username --shell /bin/rbash --home /backups/$username/ > /dev/null 2>&1
+adduser  -D -H -g "Borg Backup $username" $username -s /bin/rbash -h /backups/$username/ > /dev/null 2>&1
 if [ $? == 0 ]
 then
     mkdir -p /backups/$username/repo/
