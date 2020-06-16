@@ -46,7 +46,7 @@ docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o 
 docker create --net vlan_12 --ip 10.12.12.222 --name="borgs" .... 
 ```
 This creates a layer 2 interface directly between the host and the network, I then assign an IP direct to the container, that way theres
-no direct (simple) way of getting to container. In "vlan_12", theres just a firewall and the docker container   
+no direct (simple) way of getting to host from container (or even from the network). In "vlan_12", theres just a firewall and the docker container   
 
 ## Layout
 
