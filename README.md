@@ -69,6 +69,7 @@ The container users two volumes, /backups and /etc/borgs/etc/. If you want persi
  ## Changes
 
   * 0.9 - Initial build
+  * alpine:0.9 - the alpine based build (so far seems to work ok)
 
 ## Attributions
 
