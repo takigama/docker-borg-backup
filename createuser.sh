@@ -51,6 +51,9 @@ else
     echo User exists, $username, enforcing settings
 fi
 
+# on alpine, for some reason the account is locked by default
+passwd -u $username > /dev/null 2>&1
+
 # we really should check $2 is what it says it is.
 echo $2 > /opt/borgs/etc/users/$username
 
@@ -65,7 +68,7 @@ chown root:$username /backups/$username
 chmod 710 /backups/$username
 
 # create the rbash profile (even if it already exists)
-cp -f /opt/borgs/etc/rbash_profile /backups/$username/.bash_profile
+cp -f /opt/borgs/rbash_profile /backups/$username/.bash_profile
 
 # make the profile unmodifable
 chown root:root /backups/$username/.bash_profile

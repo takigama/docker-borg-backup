@@ -14,7 +14,6 @@ RUN set -x \
     && apk add linux-headers \
     && apk add openssh-server \
     && apk add bash \
-    && ssh-keygen -A \
     && pip3 install borgbackup==$BORG_VERSION \
     && apk del build-base
 
@@ -32,18 +31,23 @@ RUN set -x \
         -e 's/^#PermitRootLogin without-password$/PermitRootLogin no/g' \
         -e 's/^X11Forwarding yes$/X11Forwarding no/g' \
         -e 's/^#LogLevel .*$/LogLevel ERROR/g' \
+        -e 's/^#PubkeyAuthentication.*$/PubkeyAuthentication yes/g' \
         -e 's/^AuthorizedKeysFile.*$/AuthorizedKeysFile \/opt\/borgs\/etc\/users\/%u/g' \
         /etc/ssh/sshd_config
 
-VOLUME [ "/backups", "/opt/borgs/etc/users" ]
+VOLUME [ "/backups", "/opt/borgs/etc" ]
 
 ADD ./entrypoint.sh /
 ADD ./createuser.sh /opt/borgs/sbin/createuser
-ADD ./profile /opt/borgs/etc/rbash_profile
+ADD ./profile /opt/borgs/rbash_profile
 RUN chmod a+x /opt/borgs/sbin/createuser
 RUN ln -sf /opt/borgs/sbin/createuser /usr/sbin
+
+# why doesnt bash in alpine already have this?
 RUN cp /bin/bash /bin/rbash
-RUN ln -sf /usr/local/bin/borg /opt/borgs/bin
+RUN ln -sf /usr/bin/borg /opt/borgs/bin
+RUN mkdir -p /opt/borgs/etc/ssh/
+
 
 
 EXPOSE 22

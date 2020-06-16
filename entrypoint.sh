@@ -1,6 +1,10 @@
 #!/bin/bash
 
-# dpkg-reconfigure openssh-server
+# generate keys if necessary and create link
+mkdir -p /opt/borgs/etc/ssh/ > /dev/null 2>&1
+mkdir -p /opt/borgs/etc/users/ > /dev/null 2>&1
+ssh-keygen -A -f /opt/borgs/
+ln -sf /opt/borgs/etc/ssh/* /etc/ssh
 
 mkdir -p /backups > /dev/null 2>&1
 chmod 711 /backups
