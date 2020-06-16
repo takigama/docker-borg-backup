@@ -42,9 +42,11 @@ docker exec borg rm -f /opt/borgs/etc/users/<username>       # if you wish to de
 
 How I actually run this in my evironment:
 ```
-docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o parent=eth2 vlan_12 # gives me a layer 2 path direct to the network
+docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o parent=eth2 vlan_12
 docker create --net vlan_12 --ip 10.12.12.222 --name="borgs" .... 
 ```
+This creates a layer 2 interface directly between the host and the network, I then assign an IP direct to the container, that way theres
+no direct (simple) way of getting to container. In "vlan_12", theres just a firewall and the docker container   
 
 ## Layout
 
