@@ -9,17 +9,27 @@ The idea behind this container is to stop users from being able to modify backup
 * all users get a rbash shell with borg being their only command
 * all users run with a seperate UID - for my purposes, each server/workstation that backs up to this machine would be a seperate user
 
+## Why?
+
+Im very paranoid about push backups and those that occur over ssh without passwords are scary. Often i'll be backup publicly hosted VM's
+and the idea they can just ssh back to an internal host really increased my fear factor. This is my attempt at making that as safe as
+possible.
+
+Ultimately, i've found borg to be quite good so i think its worth the effort.
+
 
 ## Usage
 
 ```
-docker run --name borg -v <borg_backup_volume>:/backups -v <borg_user_list>:/opt/borgs/etc/users ...
+docker run --name borg -v <borg_backup_volume>:/backups -v <borg_user_list_location>:/opt/borgs/etc/users takigama/secured-borg-server
 ```
 
 To then create a user, run the following:
 
 ```
-docker exec -it borg createuser <username> "<ssh key>"
+docker exec borg createuser <username> "<ssh key>", for example:
+
+docker exec borg createuser john "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSkT3A1j89RT/540ghIMHXIVwNlAEM3WtmqVG7YN/wYwtsJ8iCszg4/lXQsfLFxYmEVe8L9atgtMGCi5QdYPl4X/c+5YxFfm88Yjfx+2xEgUdOr864eaI22yaNMQ0AlyilmK+asewfaszxcvzxcvzxcv+MCUWo+cyBFZVGOzrjJGEcHewOCbVs+IJWBFSi6w1enbKGc+RY9KrnzeDKWWqzYnNofiHGVFAuMxrmZOasqlTIKiC2UK3RmLxZicWiQmPnpnjJRo7pL0oYM9r/sIWzD6i2S9szDy6aZ john@host"
 ```
 
 To delete a user - um... i'll get to that soon(tm), but currently this involes:
@@ -37,6 +47,20 @@ The container users two volumes, /backups and /etc/borgs/etc/users. If you want 
  * /etc/borgs/etc/users/$username - each is a pubkey for $username, ultimately its our list of active users
  * /backups/$username - permission 0710 (user cant write in their own home directory or even see the files that exist there. Home directory is owned by root)
  * /backups/$username/repo - loocation for actual backups (user writable/readable, should be the only location the user can actually see anything)
+
+## TODO
+
+ * Create a multi-arch version (this looks needlessly complex) that builds with docker hub
+ * Tidy-Up the create user script (really need to make sure ssh key cant be the cause of annoying errors)
+ * Small nodejs interface for managing environment/users (maybe)
+ * Create a delete user script perhaps
+ * Test on arm32/64
+ * Test with alpine base
+
+
+ ## Changes
+
+  * 0.9 - Initial build
 
 ## Attributions
 
