@@ -11,8 +11,7 @@ The idea behind this container is to stop users from being able to modify backup
 
 ## Why?
 
-Im very paranoid about push backups and those that occur over ssh without passwords are scary. Often i'll be backup publicly hosted VM's
-and the idea they can just ssh back to an internal host really increased my fear factor. This is my attempt at making that as safe as
+Im very paranoid about push backups and those that occur over ssh withoutpasswords are scary. Often i'll be backup publicly hosted VM's and the idea they can just ssh back to an internal host really increased my fear factor. This is my attempt at making that as safe as
 possible.
 
 Ultimately, i've found borg to be quite good so i think its worth the effort.
@@ -20,8 +19,10 @@ Ultimately, i've found borg to be quite good so i think its worth the effort.
 
 ## Usage
 
+The best tag to pull currently is alpine-multiarch-latest. As its name suggests its based on alpine and it supports most common architectures (386, x86_64, arm, arm64, etc). This tag is updated manually rather then being built from an autobuild on docker hub as I cannot figure out how to make autobuilt work on docker hub with multiple architectures! Ultimately alpine will become master soon enough as I'll exit the debian based image.
+
 ```
-docker run --name borg -v <borg_backup_volume>:/backups -v <borg_user_list_location>:/opt/borgs/etc/users takigama/secured-borg-server
+docker run --name borg -v <borg_backup_volume>:/backups -v <borg_user_list_location>:/opt/borgs/etc takigama/secured-borg-server:alpine-multiarch-latest
 ```
 
 To then create a user, run the following:
@@ -42,10 +43,11 @@ docker exec borg rm -f /opt/borgs/etc/users/<username>       # if you wish to de
 
 How I actually run this in my evironment:
 ```
-docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o parent=eth2 vlan_12 # gives me a layer 2 path direct to the network
-docker create --net vlan_12 --ip 10.12.12.222 --name="borgs" -e "TZ=Australia/Sydney" 
+docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o parent=eth2 vlan_12
+docker create --net vlan_12 --ip 10.12.12.222 --name="borgs" .... 
+```
 
-
+This creates a layer 2 interface directly between the host and the network, I then assign an IP direct to the container, that way theres no direct (simple) way of getting to host from container (or even from the network). In "vlan_12", theres just a firewall and the docker container   
 
 ## Layout
 
@@ -68,6 +70,7 @@ The container users two volumes, /backups and /etc/borgs/etc/. If you want persi
  ## Changes
 
   * 0.9 - Initial build
+  * alpine:0.9 - the alpine based build (so far seems to work ok)
 
 ## Attributions
 
