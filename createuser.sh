@@ -40,7 +40,7 @@ fi
 
 
 job="unknown"
-adduser  --disabled-password --no-create-home --gecos "Borg Backup $username" --quiet $username --shell /bin/rbash --home /backups/$username/ > /dev/null 2>&1
+adduser  -D -H -g "Borg Backup $username" $username -s /bin/rbash -h /backups/$username/ > /dev/null 2>&1
 if [ $? == 0 ]
 then
     mkdir -p /backups/$username/repo/
@@ -50,6 +50,9 @@ else
     job="checked"
     echo User exists, $username, enforcing settings
 fi
+
+# on alpine, for some reason the account is locked by default
+passwd -u $username > /dev/null 2>&1
 
 # we really should check $2 is what it says it is.
 echo $2 > /opt/borgs/etc/users/$username
