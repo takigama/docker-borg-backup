@@ -4,15 +4,14 @@ Building on ginkels container, this is an attempt at making a docker container w
 
 For more information about Borg Backup, an excellent deduplicating backup, refer to: https://www.borgbackup.org/
 
-The idea behind this container is to stop users from being able to modify backups except using the borg command, to achieve this the following occurs:
+The idea behind this container is to stop users from being able to modify backups except by using the borg command, to achieve this the following occurs:
 
 * all users get a rbash shell with borg being their only command
 * all users run with a seperate UID - for my purposes, each server/workstation that backs up to this machine would be a seperate user
 
 ## Why?
 
-Im very paranoid about push backups and those that occur over ssh withoutpasswords are scary. Often i'll be backup publicly hosted VM's and the idea they can just ssh back to an internal host really increased my fear factor. This is my attempt at making that as safe as
-possible.
+Im very paranoid about push backups and those that occur over ssh without passwords are scary. Often i'll be backing up publicly hosted VM's and the idea they can just ssh back to an internal host really increased my fear factor. This is my attempt at making that as safe as possible.
 
 Ultimately, i've found borg to be quite good so i think its worth the effort.
 
@@ -25,7 +24,7 @@ The best tag to pull currently is alpine-multiarch-latest. As its name suggests 
 docker run --name borg -v <borg_backup_volume>:/backups -v <borg_user_list_location>:/opt/borgs/etc takigama/secured-borg-server:alpine-multiarch-latest
 ```
 
-To then create a user, run the following:
+To then create a user (or update their ssh key), run the following:
 
 ```
 docker exec borg createuser <username> "<ssh key>", for example:
@@ -33,7 +32,7 @@ docker exec borg createuser <username> "<ssh key>", for example:
 docker exec borg createuser john "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABAQDSkT3A1j89RT/540ghIMHXIVwNlAEM3WtmqVG7YN/wYwtsJ8iCszg4/lXQsfLFxYmEVe8L9atgtMGCi5QdYPl4X/c+5YxFfm88Yjfx+2xEgUdOr864eaI22yaNMQ0AlyilmK+asewfaszxcvzxcvzxcv+MCUWo+cyBFZVGOzrjJGEcHewOCbVs+IJWBFSi6w1enbKGc+RY9KrnzeDKWWqzYnNofiHGVFAuMxrmZOasqlTIKiC2UK3RmLxZicWiQmPnpnjJRo7pL0oYM9r/sIWzD6i2S9szDy6aZ john@host"
 ```
 
-To delete a user - um... i'll get to that soon(tm), but currently this involes:
+To delete a user - I might write a script for this, but currently this involes:
 
 ```
 docker exec borg deluser <username>
