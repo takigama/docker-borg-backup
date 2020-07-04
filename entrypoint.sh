@@ -3,7 +3,7 @@
 
 mkdir -p /opt/borgs/etc/ssh/ > /dev/null 2>&1
 mkdir -p /opt/borgs/etc/users/ > /dev/null 2>&1
-if [ ! -f /opt/borg/etc/ssh/ssh_host_dsa_key ]
+if [ ! -f /opt/borgs/etc/ssh/ssh_host_dsa_key ]
 then
     echo "doing SSH key createion"
     ssh-keygen -A
