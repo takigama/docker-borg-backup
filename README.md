@@ -64,6 +64,7 @@ The container users two volumes, /backups and /etc/borgs/etc/. If you want persi
  * Create a delete user script perhaps
  * Test on arm32/64
  * Test with alpine base
+ * clean off the un-required build utilities and generally slim down the docker image
 
 
  ## Changes
