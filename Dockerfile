@@ -1,6 +1,6 @@
 FROM alpine
 
-ENV BORG_VERSION=1.1.17
+ENV BORG_VERSION=1.2.2
 
 RUN set -x \
     && mkdir -p /opt/borgs/sbin \
