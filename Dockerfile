@@ -1,6 +1,6 @@
 FROM alpine
 
-ENV BORG_VERSION=1.1.13
+ENV BORG_VERSION=1.4.0
 
 RUN set -x \
     && mkdir -p /opt/borgs/sbin \
@@ -14,7 +14,11 @@ RUN set -x \
     && apk add linux-headers \
     && apk add openssh-server \
     && apk add bash \
-    && pip3 install borgbackup==$BORG_VERSION \
+    && apk add py3-lz4 py3-lz4-pyc \
+    && apk add lz4 lz4-dev \
+    && apk add zstd-dev zstd-libs \
+    && apk add libxxhash xxhash-dev \
+    && pip3 install --break-system-packages borgbackup==$BORG_VERSION \
     && apk del build-base
 
 
