@@ -15,6 +15,13 @@ fi
 export DOCKER_CLI_EXPERIMENTAL=enabled
 
 docker login 
+
+# stuff that needs to be done to handle multi architecture builds
+# docker run --rm --privileged docker/binfmt:820fdd95a9972a5308930a2bdfb8573dd4447ad3
+# docker buildx create --name mybuilder
+# docker buildx use mybuilder
+# docker buildx inspect --bootstrap
+# docker login
 # docker buildx build --platform linux/amd64,linux/386,linux/arm64,linux/ppc64le,linux/s390x,linux/arm/v7,linux/arm/v6 .  -t takigama/secured-borg-server:latest --push
 # for some reason ppc64le is no longer functional
 echo "docker buildx build --build-arg BORG_VERSION=$1 --platform linux/amd64,linux/386,linux/arm64,linux/s390x,linux/arm/v7,linux/arm/v6 .  -t takigama/secured-borg-server:$2 --push"
