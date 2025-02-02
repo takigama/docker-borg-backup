@@ -118,6 +118,8 @@ The container users two volumes, /backups and /etc/borgs/etc/. If you want persi
 
  ## Changes
 
+  * 0.96 - added 2.0.0b14 test version (all archs)
+  * 0.96 - changed the build tooling slightly
   * 0.94 - slim off the comainter, build against new alpine, added a small benchmark test (/benchmarktest.sh)
   * 0.91 - fix ssh key regen (thanks to M1Sports20 on Github)
   * 0.9 - Initial build
