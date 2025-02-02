@@ -40,7 +40,48 @@ docker exec borg rm -rf /backups/<username>       # if you wish to delete their 
 docker exec borg rm -f /opt/borgs/etc/users/<username>       # if you wish to delete their key
 ```
 
-How I actually run this in my evironment:
+# How I Run It
+
+The way I run this in my environment is to add a second address to the network (ip address add 1.2.3.4/24 dev eth0 for example), bind ssh to one address and the host ssh to the other address
+
+sshd config
+```
+user@put-your-backups-in-me:~$ cat /etc/ssh/sshd_config
+...
+Port 22
+#AddressFamily any
+ListenAddress 1.2.3.4
+#ListenAddress ::
+...
+```
+
+docker run command
+```
+docker run --name borg -p 1.2.3.5:22:22 -v <borg_backup_volume>:/backups takigama/secured-borg-server:alpine-multiarch-latest
+```
+
+To add a second address to your network interface permanently on ubuntu for example:
+```
+network:
+    bonds:
+        eth0:
+            dhcp4: false
+            addresses:
+              - 1.2.3.4/24
+              - 1.2.3.5/24
+            gateway4: 1.2.3.1
+            nameservers:
+              search: [ somedomain ]
+              addresses: [ 1.2.3.53 ]
+```
+
+You could also just forward a diffenet port for ssh to the container
+```
+docker run --name borg -p 1022:22 -v <borg_backup_volume>:/backups takigama/secured-borg-server:alpine-multiarch-latest
+```
+
+
+How I used to run it:
 ```
 docker network create -d macvlan --subnet=10.12.12.0/24 --gateway=10.12.12.1 -o parent=eth2 vlan_12
 docker create --net vlan_12 --ip 10.12.12.222 --name="borgs" .... 
