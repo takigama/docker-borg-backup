@@ -99,17 +99,21 @@ The container users two volumes, /backups and /etc/borgs/etc/. If you want persi
 
 ## TODO
 
- * Create a multi-arch version (this looks needlessly complex) that builds with docker hub
  * Tidy-Up the create user script (really need to make sure ssh key cant be the cause of annoying errors)
  * Small nodejs interface for managing environment/users (maybe)
  * Create a delete user script perhaps
- * Test on arm32/64
- * Test with alpine base
  * clean off the un-required build utilities and generally slim down the docker image
+
+## Done
+ * clean off the un-required build utilities and generally slim down the docker image - partially done, image is half the size of its original
+ * Create a multi-arch version (this looks needlessly complex) that builds with docker hub
+ * Test on arm32/64
+ * Move to alpine base
 
 
  ## Changes
 
+  * 0.94 - slim off the comainter, build against new alpine, added a small benchmark test (/benchmarktest.sh)
   * 0.91 - fix ssh key regen (thanks to M1Sports20 on Github)
   * 0.9 - Initial build
   * alpine:0.9 - the alpine based build (so far seems to work ok)
