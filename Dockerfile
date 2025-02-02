@@ -16,6 +16,7 @@ RUN set -x \
     && apk add bash \
     && apk add py3-lz4 py3-lz4-pyc \
     && apk add lz4 lz4-dev \
+    && apk add libffi-dev libffi \
     && apk add zstd-dev zstd-libs \
     && apk add libxxhash xxhash-dev \
     && pip3 install --break-system-packages borgbackup==$BORG_VERSION \
