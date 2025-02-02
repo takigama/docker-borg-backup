@@ -80,6 +80,11 @@ You could also just forward a diffenet port for ssh to the container
 docker run --name borg -p 1022:22 -v <borg_backup_volume>:/backups takigama/secured-borg-server:alpine-multiarch-latest
 ```
 
+The URL for backing up to borg becomes:
+```
+{$USER}@{$BORG_IP}:/backups/{$USER}/repo/
+```
+Replace $USER and $BORG_IP with the approriate details
 
 How I used to run it:
 ```
